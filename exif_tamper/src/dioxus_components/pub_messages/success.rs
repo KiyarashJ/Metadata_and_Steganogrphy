@@ -6,7 +6,7 @@ use tokio::time::{sleep, Duration};
 pub fn msg(message: &'static str) -> Element {
     rsx! {
         div {
-            h1 { class: "text-green-500 text-2xl", "{message}" }
+            h1 { class: "text-green-500 text-2xl mt-10", "{message}" }
         }
     }
 }

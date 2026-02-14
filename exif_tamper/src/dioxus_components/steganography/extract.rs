@@ -22,7 +22,8 @@ pub fn extract(
 ) -> Element {
     let mut decode = use_signal(|| Decode::default());
     use_effect(move || {
-        if main_timer.read().state() == TimerState::Finished {
+        let state = main_timer.read().state();
+        if state == TimerState::Finished {
             on_finished.call(());
             main_timer.write().reset();
         }
@@ -82,8 +83,18 @@ pub fn extract(
                         "done"
                     }
                     
-                    if handler.read().status != Status::Def {
-                        crate::dioxus_components::pub_messages::success::success { message: handler.read().message }
-                    }
+                    {match handler.read().status {
+    Status::MessageDecodedSuccessfully => rsx! {
+        crate::dioxus_components::pub_messages::success::success {
+            message: handler.read().message
+        }
+    },
+    Status::ErrorInDecodingMessage => rsx! {
+        crate::dioxus_components::pub_messages::fail::fail {
+            message: handler.read().message
+        }
+    },
+    _ => rsx! {},  // برای Def و Pending هیچی نشون نده
+}}
                 }
 }

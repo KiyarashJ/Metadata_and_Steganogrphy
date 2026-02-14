@@ -20,8 +20,10 @@ pub fn writing(info: Res, filename: &str, ext: &str) {
         },
         
         Res::Decode(decode) => {
-                let _ = file_create.write_all(format!("message : {:?}\n",decode.message.as_bytes()).as_bytes());
-                let _ = file_create.write_all(format!("fragments : {:?}", &decode.fragments.join("\n").as_bytes().to_vec()).as_bytes());
+                    let message_str = decode.message;
+                    let _ = writeln!(file_create, "message: {}", message_str);
+                    let fragments_str = decode.fragments.join("\n");
+                    let _ = writeln!(file_create, "fragments:\n{}", fragments_str);
         },
     }
 }

@@ -3,7 +3,7 @@ use std::time::Duration;
 use dioxus::prelude::*;
 use dioxus_timer::use_timer;
 
-use crate::dioxus_components::pub_messages::status_message_handling::Handling;
+use crate::dioxus_components::pub_messages::status_message_handling::{Handling, Status};
 
 #[component]
 pub fn user_req() -> Element {
@@ -18,7 +18,11 @@ pub fn user_req() -> Element {
             } else {
                 crate::dioxus_components::pub_components::upload_file::upload_file {
                     handler: main_handling_signal,
-                    on_finished: move || main_handling_signal.write().req = "",
+                    on_finished: move || {
+                        main_handling_signal.write().req = "";
+                        main_handling_signal.write().message = "";
+                        main_handling_signal.write().status = Status::Def;
+                    },
                     main_timer
                 }
             }
